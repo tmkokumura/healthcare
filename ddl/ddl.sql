@@ -1,0 +1,1 @@
+CREATE TABLE healthcare(id INTEGER PRIMARY KEY AUTOINCREMENT, data_type TEXT, source_name TEXT, source_version TEXT, device TEXT, unit TEXT, creation_date TEXT, start_date TEXT, end_date TEXT, value REAL);

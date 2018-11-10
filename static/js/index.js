@@ -4,12 +4,16 @@ $(function() {
 
     /* 表示ボタン押下時 */
     $('#view').click(function(){
-        console.log('ajax start');
         ajax();
     });
 });
+
 /* Ajaxでチャートデータを取得 */
 function ajax() {
+    // 事前にcanvasを再生成
+    $('#canvas-box').empty();
+    $('#canvas-box').append('<canvas id="canvas"><canvas/>');
+
     var data_type = $('#data-type').val();
     var source_name = $('#source-name').val();
     var start_date = $('#start-date').val();
@@ -46,10 +50,6 @@ function drawChart(data) {
     var ctx = $('#canvas').get(0).getContext('2d');
     var labels = data[0].source_names[0].dates;
     var values = data[0].source_names[0].values;
-    console.log('labels:');
-    console.log(labels);
-    console.log('values:');
-    console.log(values);
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {

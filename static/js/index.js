@@ -1,7 +1,6 @@
-/* 初期表示時 */
 $(function() {
+    /* 初期表示時 */
     ajax();
-
 
     /* 表示ボタン押下時 */
     $('#view').click(function(){

@@ -31,7 +31,7 @@ SELECT
     data_type,
     source_name,
     end_date AS date,
-    value
+    SUM(value) AS value
 FROM
     healthcare
 WHERE
@@ -42,8 +42,29 @@ AND
     end_date >= ?
 AND
     end_date <= ?
+GROUP BY
+    data_type,
+    source_name,
+    end_date
 ORDER BY
     data_type ASC,
     source_name ASC,
     end_date ASC;
+'''
+
+I_HEALTHCARE = '''
+INSERT INTO healthcare (
+    data_type,
+    source_name,
+    source_version,
+    device,
+    unit,
+    creation_date,
+    creation_time,
+    start_date,
+    start_time,
+    end_date,
+    end_time,
+    value
+ ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 '''

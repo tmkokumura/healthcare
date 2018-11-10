@@ -1,6 +1,6 @@
 /* 初期表示時 */
 $(function() {
-    // ajax();
+    ajax();
 
 
     /* 表示ボタン押下時 */
@@ -45,17 +45,19 @@ function ajax() {
 /* チャート描画 */
 function drawChart(data) {
     var ctx = $('#canvas').get(0).getContext('2d');
-    var labels = data[0].source_names[0].dates
-    var values = data[0].source_names[0].values
-    console.log(data)
-    console.log(values)
+    var labels = data[0].source_names[0].dates;
+    var values = data[0].source_names[0].values;
+    console.log('labels:');
+    console.log(labels);
+    console.log('values:');
+    console.log(values);
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: data[0].source_names[0].dates,
+            labels: labels,
             datasets: [{
                 label: data[0].data_type + ' ' + data[0].source_names[0].source_name,
-                data: data[0].source_names[0].values,
+                data: values,
                 backgroundColor: "rgba(153,255,0,0.4)"
             }]
         }

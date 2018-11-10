@@ -7,24 +7,38 @@
     <title>Healthcare</title>
     <link rel="stylesheet" href="/static/css/index.css">
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script type="text/javascript" src="/static/js/index.js"></script>
 </head>
 <body>
     <div>
         <label for="start-date">開始日</label>
-        <input type="date" id="start-date">
+        <input type="date" id="start-date" value="{{start_date}}">
     </div>
     <div>
         <label for="end-date">終了日</label>
-        <input type="date" id="end-date">
+        <input type="date" id="end-date" value="{{end_date}}">
     </div>
     <div>
         <label for="data-type">データ種別</label>
-        <select id="data-type" size="5" multiple></select>
+        <select id="data-type">
+            {% for data_type in data_types %}
+            <option value="{{data_type}}">{{data_type}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="source-name">ソース名</label>
+        <select id="source-name">
+            {% for source_name in source_names %}
+            <option value="{{source_name}}">{{source_name}}</option>
+            {% endfor %}
+        </select>
     </div>
     <div>
         <button id="view">表示</button>
     </div>
+    <div id="msg"></div>
     <canvas id="canvas"></canvas>
 </body>
 </html>

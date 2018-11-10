@@ -123,12 +123,12 @@ def build_chart_data(records):
             source_names.clear()
 
         dates.append(date)
-        values.append(value)
+        values.append(float(value))
 
         prev_data_type = data_type
         prev_source_name = source_name
 
-    source_names.append({'source_name': prev_source_name, 'dates': [dates], 'values': [values]})
+    source_names.append({'source_name': prev_source_name, 'dates': dates, 'values': values})
     data_types.append({'data_type': data_type, 'source_names': source_names})
 
     return data_types

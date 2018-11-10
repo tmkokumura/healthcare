@@ -4,19 +4,18 @@ from datetime import datetime
 import xml.etree.ElementTree as et
 import sqlite3
 import conf
+import sql
 import logging
 logging.basicConfig(level=conf.LOG_LEVEL, format=conf.LOG_FORMAT)
-
-
-''' Constants '''
-INPUT_FILE = 'input/healthcare.xml'
-SQL = 'INSERT INTO healthcare (data_type, source_name, source_version, device, unit, creation_date, start_date, \
-end_date, value) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);'
 
 
 ''' Functions '''
 def format_date(date_str):
     return datetime.strftime(datetime.strptime(date_str, conf.INPUT_DATE_FORMAT), conf.SQL_DATE_FORMAT)
+
+
+def format_time(date_str):
+    return datetime.strftime(datetime.strptime(date_str, conf.INPUT_DATE_FORMAT), conf.SQL_TIME_FORMAT)
 
 
 ''' Main script '''
@@ -28,7 +27,7 @@ if __name__ == '__main__':
     cur = conn.cursor()
 
     # ファイルの内容でtreeを初期化
-    tree = et.ElementTree(file=INPUT_FILE)
+    tree = et.ElementTree(file=conf.INPUT_FILE)
 
     # treeのroot要素を取得
     root = tree.getroot()
@@ -43,18 +42,22 @@ if __name__ == '__main__':
         source_version = record.attrib.get('sourceVersion')
         device = record.attrib.get('device')
         unit = record.attrib.get('unit')
-        creation_date = record.attrib.get('creationDate')
-        start_date = record.attrib.get('startDate')
-        end_date = record.attrib.get('endDate')
+        creation_datetime = record.attrib.get('creationDate')
+        start_datetime = record.attrib.get('startDate')
+        end_datetime = record.attrib.get('endDate')
         value = record.attrib.get('value')
 
         # 日付フォーマット
-        creation_date = format_date(creation_date)
-        start_date = format_date(start_date)
-        end_date = format_date(end_date)
+        creation_date = format_date(creation_datetime)
+        creation_time = format_time(creation_datetime)
+        start_date = format_date(start_datetime)
+        start_time = format_time(start_datetime)
+        end_date = format_date(end_datetime)
+        end_time = format_time(end_datetime)
 
-        params = (data_type, source_name, source_version, device, unit, creation_date, start_date, end_date, value)
-        cur.execute(SQL, params)
+        params = (data_type, source_name, source_version, device, unit, creation_date, creation_time, start_date,
+                  start_time, end_date, end_time, value)
+        cur.execute(sql.I_HEALTHCARE, params)
 
         count += 1
 

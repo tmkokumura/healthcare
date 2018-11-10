@@ -50,6 +50,7 @@ function drawChart(data) {
     var ctx = $('#canvas').get(0).getContext('2d');
     var labels = data[0].source_names[0].dates;
     var values = data[0].source_names[0].values;
+    var mv_values = data[0].source_names[0].mv_values;
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -58,6 +59,10 @@ function drawChart(data) {
                 label: data[0].data_type + ' ' + data[0].source_names[0].source_name,
                 data: values,
                 backgroundColor: "rgba(153,255,0,0.4)"
+            },{
+                label: data[0].data_type + ' ' + data[0].source_names[0].source_name + '移動平均',
+                data: mv_values,
+                backgroundColor: "rgba(0,153,255,0.4)"
             }]
         }
     });

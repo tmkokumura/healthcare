@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify, make_response
 from contextlib import closing
 from datetime import datetime
 import sqlite3
+import numpy as np
 import conf
 import sql
 import logging
@@ -63,6 +64,12 @@ def chart():
     if len(records) > 0:
         # チャートデータを整形
         data = build_chart_data(records)
+
+        # 追加の集計処理
+        date_diff = get_date_diff(start_date, end_date)
+        data = add_moving_average(data, int(date_diff * 0.1))
+
+        logging.info('data:{}'.format(data))
 
         # レスポンスデータ
         res = {'result': 'OK', 'data': data}
@@ -132,6 +139,31 @@ def build_chart_data(records):
     data_types.append({'data_type': data_type, 'source_names': source_names})
 
     return data_types
+
+
+# 移動平均を追加
+def add_moving_average(data, range):
+
+    b = np.ones(range) / range
+
+    for data_type in data:
+        source_names = data_type.get('source_names')
+
+        for source_name in source_names:
+            values = source_name.get('values')
+
+            mv_values = np.convolve(values, b, mode='same')  # 移動平均
+            source_name['mv_values'] = mv_values.tolist()
+
+    return data
+
+
+# start_dateとend_dateの日数差を計算する
+def get_date_diff(start_date_str, end_date_str):
+    start_date = datetime.strptime(start_date_str, conf.HTML_DATE_FORMAT)
+    end_date = datetime.strptime(end_date_str, conf.HTML_DATE_FORMAT)
+    delta = end_date - start_date
+    return delta.days
 
 
 if __name__ == '__main__':
